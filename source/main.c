@@ -20,27 +20,28 @@ int main(void) {
 	DDRC = 0x00; PORTC = 0xFF;
 	DDRD = 0xFF; PORTD = 0x00; 
  
-	unsigned char tmpA = 0x00;
-	unsigned char tmpB = 0x00;
-	unsigned char tmpC = 0x00;
-	unsigned char tmpD = 0x00;
-	char diff;
-	unsigned int total;
+	unsigned char tmpA ;
+	unsigned char tmpB ;
+	unsigned char tmpC ;
+	unsigned char tmpD ;
+	unsigned char total;
 while(1) {
-	tmpA = PINA & 0xFF;
-	tmpB = PINB & 0xFF;
-	tmpC = PINC & 0xFF;
+	tmpA = PINA ;
+	tmpB = PINB ;
+	tmpC = PINC ;
 
 	total = tmpA + tmpB + tmpC;
 
-	if( tmpA+tmpB+tmpC >= 0x8C){
-		tmpD = 0x01;
+	
+	if( tmpA-tmpC >= 0x50 || tmpC-tmpA >= 0x50 ){
+		tmpD = total>>2 &0xFE;
 	}
-	else if( tmpA-tmpC >= 0x50 || tmpC-tmpA >= 0x50 ){
-		tmpD = 0x02;
-	}
+	else if( total>= 0x8C){
+                tmpD = total>>2 |0x01;
+        }
+
 	else{
-		tmpD = total & 0xFC;
+		tmpD = total;
 	}
 	PORTD = tmpD;
 }
